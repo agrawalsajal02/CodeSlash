@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 app.get("/",async function(req, res) {
   res.render("search");
 });
-/*
+
 app.get("/chart/:id",function(req,res){
   var handle=req.params.id;
   let url = "https://codeforces.com/api/user.status?handle=" + handle;
@@ -37,7 +37,6 @@ app.get("/chart/:id",function(req,res){
     }
   });
 });
-*/
 
  //++++++++++++++++++++++++++++ this is another chart
 app.get("/chartid/:id",function(req,res){
@@ -54,31 +53,42 @@ app.get("/chartid/:id",function(req,res){
 
         var theDate = new Date(dat.creationTimeSeconds * 1000);
         dateString = theDate.toUTCString();
-  console.log(dateString,",");
-        var dd=new Date(dateString).toDateString();
+        var dd=new Date(dateString);
         date.push(dd);
-obj["date"]=1;
-//console.log(date,obj["date"]);
-
+//console.log(date,",");
       })
-     console.log(obj);
+  
+//=====================================
 
-     date.forEach(function(val){
-//console.log(val);
-     })
+var arr = new Array(date), // fill it with array with your data
+results = {}, rarr = [], i, datea;
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+for (i=0; i<date.length; i++) {
+  // get the date
+  datea = [monthNames[date[i].getMonth()],date[i].getFullYear()].join("-");
+  results[datea] = results[datea] || 0;
+  results[datea]++; 
+  console.log(date[i].getMonth(),date[i].getFullYear());
+}
+
+// you can always convert it into an array of objects, if you must
+var dd1=[];
+var va=[];
+for (i in results) {
+  if (results.hasOwnProperty(i)) {
+dd1.push(i);
+va.push(results[i]);
+    rarr.push({datea:i,counts:results[i]});
+//console.log("h ",i,results[i]);
+  }
+}
+dd1.reverse();
+va.reverse();
+res.render("chartid.ejs",{dd1:dd1,va:va});    
+   //   res.send("correct");
      
-     res.send("correct");
-     
-     /*
-     
-      data["result"].forEach(function(val){
-      
-      });
-      res.render("chart.ejs", {levels:levels,values:values });
-      */// res.send(body);
-      //   res.send(results["result"][0]); // add  ["verdict"] to find status of questions
- 
- /**/ 
     }
   });
 });
